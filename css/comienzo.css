@@ -1,0 +1,64 @@
+body {
+  margin: 0;
+  background: url(../img/fondo.jpg);
+  background-size: cover;
+  color: rgb(243, 136, 110);
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+#cont-bienvenida {
+  text-align: center;
+  animation: aparecer 1s ease-in-out;
+}
+
+#titulo-bien {
+  font-size: 4rem;
+  margin-bottom: 2rem;
+  animation: aparecer-arriba 1s ease-out;
+}
+
+#bot-inicio {
+  font-size: 1.5rem;
+  padding: 1rem 2rem;
+  background-color: #fe4c05;
+  color: rgb(255, 255, 255);
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  animation: aparecer-abajo 1s ease-out;
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes aparecer-arriba {
+  from {
+    transform: translateY(-50%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes aparecer-abajo {
+  from {
+    transform: translateY(50%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
