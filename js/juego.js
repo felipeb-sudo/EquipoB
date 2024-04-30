@@ -9,13 +9,8 @@ let temporizador;
 let totalMovimientos = 0
 let paresEncontrados = []
 
-
-
-/*creamos las tarjet por medio js*/
 let lastarjetas = '<div class="carta"><div class="sello"></div><div class="cara"></div></div>'
 
-
-/*aqui creamos el temas del tiempo */
 function iniciarJuego() {
     const tiempoElemento = document.getElementById('tiempo')
     tiempoElemento.innerText = `Tiempo restante: ${tiempo} segundos`
@@ -28,8 +23,6 @@ function iniciarJuego() {
             window.location.href = "final.html";
             localStorage.setItem('paresEncontrados', paresEncontrados.join(','))
 
-
-
         } else if (document.querySelectorAll('.carta:not(.active)').length === 0) {
             clearInterval(temporizador);
             alert("¡Felicidades, has ganado!");
@@ -41,7 +34,6 @@ function iniciarJuego() {
     }, 1000)
 }
 
-/* evento de activar las cartas, el Dom*/
 function activar(e) {
     e.target.classList.add('active')
     if (!selecionador[0] || selecionador[0] !== e.target) {
@@ -63,8 +55,6 @@ function activar(e) {
     }
 }
 
-
-/*creador de los valores */
 function numrandom() {
     let numra = Math.floor(Math.random() * totalTarjeta * 0.5)
     let valore = valores.filter(values => values === numra)
@@ -72,12 +62,10 @@ function numrandom() {
         valores.push(numra)
 
     } else {
-        /*esto hace generar otro numero aleatorio*/
         numrandom()
     }
 }
 
-/* Función para asignar valores a las cartas */
 function valoresCarta(valor) {
     let numra = valor;
     if (valor < cartasDisponibles.length) {
@@ -86,15 +74,11 @@ function valoresCarta(valor) {
     return numra;
 }
 
-
-
-/*creamos el total de cartas por medio ese for */
 for (let i = 0; i < totalTarjeta; i++) {
     let div = document.createElement('div')
     div.innerHTML = lastarjetas
     carta.push(div)
     document.querySelector('#jue').append(carta[i])
-        /*agragamos en el for iniciar el num random */
     numrandom()
     carta[i].querySelector('.cara').innerHTML = valoresCarta(valores[i])
     carta[i].querySelectorAll('.carta')[0].addEventListener('click', activar)
