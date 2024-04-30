@@ -1,16 +1,15 @@
-document.getElementById('boton-reiniciar').addEventListener('click', function() {
-  window.location.href = 'juego.html';
-});
-
-function mostrarPuntaje() {
-  let puntaje = localStorage.getItem('puntaje');
-  if (puntaje) {
-      document.getElementById('valor-puntaje').textContent = puntaje;
-  } else {
-      document.getElementById('valor-puntaje').textContent = 'No se encontró puntaje';
-  }
+// Recuperar paresEncontrados del almacenamiento local y convertirlo a un array
+let paresEncontrados = localStorage.getItem('paresEncontrados')
+if (paresEncontrados) {
+    paresEncontrados = paresEncontrados.split(',')
+} else {
+    paresEncontrados = [];
 }
 
-window.onload = function() {
-  mostrarPuntaje();
-};
+document.getElementById('pares').innerText = paresEncontrados.length
+
+
+//boton de final
+document.getElementById('boton-reiniciar').addEventListener('click', function() {
+    window.location.href = 'juego.html'
+});

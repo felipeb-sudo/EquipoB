@@ -1,103 +1,102 @@
-let totalCartas = 12;
-let cartasDisponibles = ['A', 'K', 'Q', 'J'];
-let cartas = [];
-let cartasSeleccionadas = [];
-let valoresUsados = [];
-let movimientoActual = 0;
-let intentosActuales = 0;
-let gameTime = 30;
-let timerElement = document.querySelector('#timer');
+const totalTarjeta = 12
+let cartasDisponibles = ['A', 'K', 'Q', 'J']
+let carta = []
+let selecionador = []
+let valores = []
+let movimiento = 0
+let tiempo = 30
+let temporizador;
+let totalMovimientos = 0
+let paresEncontrados = []
 
+
+
+/*creamos las tarjet por medio js*/
+let lastarjetas = '<div class="carta"><div class="sello"></div><div class="cara"></div></div>'
+
+
+/*aqui creamos el temas del tiempo */
+function iniciarJuego() {
+    const tiempoElemento = document.getElementById('tiempo')
+    tiempoElemento.innerText = `Tiempo restante: ${tiempo} segundos`
+    temporizador = setInterval(() => {
+        tiempo--;
+        tiempoElemento.innerText = `Tiempo restante: ${tiempo} segundos`
+        if (tiempo <= 0) {
+            clearInterval(temporizador)
+            alert("¡Tiempo agotado!")
+            window.location.href = "final.html";
+            localStorage.setItem('paresEncontrados', paresEncontrados.join(','))
+
+
+
+        } else if (document.querySelectorAll('.carta:not(.active)').length === 0) {
+            clearInterval(temporizador);
+            alert("¡Felicidades, has ganado!");
+            window.location.href = "final.html";
+            localStorage.setItem('paresEncontrados', paresEncontrados.join(','))
+
+
+        }
+    }, 1000)
+}
+
+/* evento de activar las cartas, el Dom*/
 function activar(e) {
-   if (movimientoActual < 2) {
-      
-      if ((!cartasSeleccionadas[0] || cartasSeleccionadas[0] !== e.target) && !e.target.classList.contains('activa') ) {
-         e.target.classList.add('activa');
-         cartasSeleccionadas.push(e.target);
-
-         if (++movimientoActual == 2) {
-
-            intentosActuales++;
-            document.querySelector('#estadisticas').innerHTML = intentosActuales + ' esfuerzos';
-
-            if (cartasSeleccionadas[0].querySelectorAll('.cara')[0].innerHTML == cartasSeleccionadas[1].querySelectorAll('.cara')[0].innerHTML) {
-               cartasSeleccionadas = [];
-               movimientoActual = 0;
-               verificarJuegoCompleto();
-            }
-            else {
-               setTimeout(() => {
-                  cartasSeleccionadas[0].classList.remove('activa');
-                  cartasSeleccionadas[1].classList.remove('activa');
-                  cartasSeleccionadas = [];
-                  movimientoActual = 0;
-               }, 600);
-            }
-         }
-      }
-   }
+    e.target.classList.add('active')
+    if (!selecionador[0] || selecionador[0] !== e.target) {
+        selecionador.push(e.target)
+    }
+    totalMovimientos++;
+    document.getElementById('movimiento').innerText = `Movimientos: ${totalMovimientos}`
+    if (selecionador.length === 2) {
+        if (selecionador[0].querySelectorAll('.cara')[0].innerHTML === selecionador[1].querySelectorAll('.cara')[0].innerHTML) {
+            paresEncontrados.push([selecionador[0].querySelector('.cara').innerHTML, selecionador[1].querySelector('.cara').innerHTML])
+            selecionador = []
+        } else {
+            setTimeout(() => {
+                selecionador[0].classList.remove('active')
+                selecionador[1].classList.remove('active')
+                selecionador = []
+            }, 600);
+        }
+    }
 }
 
-function valorAleatorio() {
-   let rnd = Math.floor(Math.random() * totalCartas * 0.5);
-   let valores = valoresUsados.filter(valor => valor === rnd);
-   if (valores.length < 2) {
-      valoresUsados.push(rnd);
-   }
-   else {
-      valorAleatorio();
-   }
+
+/*creador de los valores */
+function numrandom() {
+    let numra = Math.floor(Math.random() * totalTarjeta * 0.5)
+    let valore = valores.filter(values => values === numra)
+    if (valore.length < 2) {
+        valores.push(numra)
+
+    } else {
+        /*esto hace generar otro numero aleatorio*/
+        numrandom()
+    }
 }
 
-function obtenerValorCara(valor) {
-   let rtn = valor;
-   if (valor < cartasDisponibles.length) {
-      rtn = cartasDisponibles[valor];
-   }
-   return rtn;
+/* Función para asignar valores a las cartas */
+function valoresCarta(valor) {
+    let numra = valor;
+    if (valor < cartasDisponibles.length) {
+        numra = cartasDisponibles[valor];
+    }
+    return numra;
 }
 
-function star(){
-   for (let i=0; i < totalCartas; i++) {
-      let carta = document.createElement('div');
-      carta.classList.add('carta');
 
-      let reverso = document.createElement('div');
-      reverso.classList.add('reverso');
-      carta.appendChild(reverso);
 
-      let cara = document.createElement('div');
-      cara.classList.add('cara');
-      carta.appendChild(cara);
-
-      cartas.push(carta);
-      document.querySelector('#juego').appendChild(carta);
-      valorAleatorio();
-
-      let valorCara = obtenerValorCara(valoresUsados[i]);
-      cara.innerHTML = valorCara;
-      carta.addEventListener('click', activar);
-   }
-   let intervalId = setInterval(() => {
-      gameTime--;
-      timerElement.textContent = gameTime + ' seconds';
-      if (gameTime === 0) {
-        clearInterval(intervalId);
-         window.location.href = 'perdio.html';
-        alert("Se acabó el tiempo!");
-      }
-   }, 1000);
+/*creamos el total de cartas por medio ese for */
+for (let i = 0; i < totalTarjeta; i++) {
+    let div = document.createElement('div')
+    div.innerHTML = lastarjetas
+    carta.push(div)
+    document.querySelector('#jue').append(carta[i])
+        /*agragamos en el for iniciar el num random */
+    numrandom()
+    carta[i].querySelector('.cara').innerHTML = valoresCarta(valores[i])
+    carta[i].querySelectorAll('.carta')[0].addEventListener('click', activar)
 }
-star();
-
-function verificarJuegoCompleto() {
-  if (document.querySelectorAll('.carta:not(.activa)').length === 0) {
-    mostrarPaginaFinal();
-  }
-}
-
-function mostrarPaginaFinal() {
-  let puntaje = intentosActuales;
-  localStorage.setItem('puntaje', puntaje);
-  window.location.href = 'final.html';
-}
+iniciarJuego()
